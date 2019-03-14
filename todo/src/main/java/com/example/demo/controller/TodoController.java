@@ -4,9 +4,6 @@ package com.example.demo.controller;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -15,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.servlet.support.RequestContextUtils;
 
 import com.example.demo.entity.Todo;
 import com.example.demo.service.TodoService;
@@ -43,13 +39,14 @@ public class TodoController {
     }
 	
 	@RequestMapping(value = "/form", method = RequestMethod.GET)
-    public ModelAndView getInserView(@ModelAttribute Todo todo, String type, String listNum, RedirectAttributes redirectAttr){
+    public ModelAndView getInserView(@ModelAttribute Todo todo, String type, int listNum, RedirectAttributes redirectAttr){
 		ModelAndView mav = new ModelAndView();
 		if("modify".equals(type)) {
-			Todo detail = todoService.select(Integer.valueOf(listNum));
+			Todo detail = todoService.select(listNum);
         	mav.addObject("todo", detail);
         	mav.addObject("type", type);
-		} /* else if ("delete".equals(type)){
+		} 
+		/* else if ("delete".equals(type)){
 			mav.setViewName("redirect:/todo/delete");
 			redirectAttr.addFlashAttribute("listnum", listNum);
 			
@@ -132,12 +129,12 @@ public class TodoController {
     }*/
 	
 	@RequestMapping(value = "/delete", method = RequestMethod.GET)
-    public ModelAndView deleteTodo(String listnum){
+    public ModelAndView deleteTodo(int listnum){
 		
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("redirect:/todo/list");
 
-    	Todo deleteTodo = todoService.select(Integer.valueOf(listnum));
+    	Todo deleteTodo = todoService.select(listnum);
     	todoService.deleteList(deleteTodo);
         	
         return mav;
