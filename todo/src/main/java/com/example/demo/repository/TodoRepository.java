@@ -1,0 +1,33 @@
+package com.example.demo.repository;
+
+import java.util.List;
+
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
+
+import com.example.demo.entity.Todo;
+
+public interface TodoRepository extends CrudRepository<Todo, String> {
+	
+	@Query("select t from Todo t where t.contents like %?1%") //쿼리에서 테이블 명을 쓸 때에는 해당 테이블과 맵핑된 도메인의 클래스 명을 사용
+	List<Todo> findByContents(String contents);
+	
+	/*@Query("select t from Todo t") //쿼리에서 테이블 명을 쓸 때에는 해당 테이블과 맵핑된 도메인의 클래스 명을 사용
+	List<Todo> findAll();*/
+	
+	Todo findByListnum(int listNum);
+	
+	List<Todo> findAllByOrderByCdateDesc();
+		
+	@Query("delete from Todo t where t.listnum = ?1")
+	void delete(String listnum);
+
+}
+
+/*
+ *  [JPA의 기능]
+
+	1. 메소드의 이름으로 쿼리 생성
+	2. 메소드의 이름으로 JPA NamedQuery 호출
+	3. @Query 어노테이션을 사용해서 Repository Interface에 쿼리를 직접 정의
+ */

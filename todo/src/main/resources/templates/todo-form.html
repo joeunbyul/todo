@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+    <head>
+        <title th:text="TodoList"> Title </title>
+    </head>
+	<body>
+	    <h1 th:text="InsertTodo">Todo</h1>
+	    <form action="#" th:action="@{/todo/regist_modify}" th:object="${todo}" method="POST">
+	      <table>
+	    	<tr><td th:text="내용"></td>
+	    	    <td>
+	    	      <input type="text" th:field="*{contents}" th:value="${todo.contents}" />
+	    	    </td>
+	    	</tr>
+	        <tr><td colspan="2">
+	        	<th:block th:if="${type == 'modify'}">
+	              	<input type="submit" th:value="수정"/> 
+	            </th:block>  	
+	            <th:block th:if="${type != 'modify'}">
+	              	<input type="submit" th:value="등록"/> 
+	            </th:block>
+	              <input type="reset" th:value="Reset"/>
+	            </td>
+	        </tr>
+	      </table>  
+	      <input type="hidden" name="type" th:value="${type}" />
+	      <input type="hidden" th:field="*{listnum}" th:value="${todo.listnum}" />
+	    </form>
+	</body>
+</html> 
