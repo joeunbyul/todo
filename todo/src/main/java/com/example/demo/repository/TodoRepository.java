@@ -11,16 +11,10 @@ public interface TodoRepository extends CrudRepository<Todo, String> {
 	
 	@Query("select t from Todo t where t.contents like %?1%") //쿼리에서 테이블 명을 쓸 때에는 해당 테이블과 맵핑된 도메인의 클래스 명을 사용
 	List<Todo> findByContents(String contents);
-	
-	/*@Query("select t from Todo t") //쿼리에서 테이블 명을 쓸 때에는 해당 테이블과 맵핑된 도메인의 클래스 명을 사용
-	List<Todo> findAll();*/
-	
+
 	Todo findByListnum(int listNum);
 	
 	List<Todo> findAllByOrderByCdateDesc();
-		
-	@Query("delete from Todo t where t.listnum = ?1")
-	void delete(String listnum);
 
 }
 

@@ -13,7 +13,7 @@ public interface TodoService {
     public List<Todo> selectList(String contents);
     
     /**
-     * 리스트 목록 조회
+     * 리스트 전체 목록 조회
      * @return
      */
     public List<Todo> selectAll();

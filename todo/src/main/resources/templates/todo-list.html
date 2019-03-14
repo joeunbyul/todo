@@ -44,7 +44,8 @@
 		  	<!--<input type="button" th:onclick="'javascript:modify('+${todo.listnum}+')'" th:value="수정"/> 
 		  	<input type="button" th:onclick="'javascript:deleteList('+${todo.listnum}+')'" th:value="삭제"/> -->
 		  	<a href="#" th:href="@{/todo/form(listNum=${todo.listnum},type='modify')}" th:text="수정">수정</a>
-		  	<a href="#" th:href="@{/todo/form(listNum=${todo.listnum},type='delete')}" th:text="삭제">삭제</a>
+		  	<a href="#" th:href="@{/todo/delete(listnum=${todo.listnum})}" th:text="삭제">삭제</a>
+		  	<!--<a href="#" th:href="@{/todo/form(listNum=${todo.listnum},type='delete')}" th:text="삭제">삭제</a> -->
 		  </td>	   		  
 	    </tr>	
 	</table>

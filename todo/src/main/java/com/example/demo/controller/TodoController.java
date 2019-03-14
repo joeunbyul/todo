@@ -49,7 +49,7 @@ public class TodoController {
 			Todo detail = todoService.select(Integer.valueOf(listNum));
         	mav.addObject("todo", detail);
         	mav.addObject("type", type);
-		} else if ("delete".equals(type)){
+		} /* else if ("delete".equals(type)){
 			mav.setViewName("redirect:/todo/delete");
 			redirectAttr.addFlashAttribute("listnum", listNum);
 			
@@ -58,10 +58,10 @@ public class TodoController {
 			 * 리다이렉트가 발생하기 전에 모든 플래시 속성을 세션에 복사한다. 리다이렉션 이후에는 저장된 플래시 속성을 세션에서 모델로 이동
 			 * 헤더에 파라미터를 붙이지 않기 때문에 URL에 노출되지 않는것임
 			 * 리다이렉트 이후에는 소멸
-			 */
+			 *
 			
 			return mav;
-		}
+		} */
 		mav.setViewName("todo-form");
         return mav;
     }	
@@ -111,7 +111,7 @@ public class TodoController {
         return result;
     }*/
 	
-	@RequestMapping(value = "/delete")
+	/*@RequestMapping(value = "/delete")
     public ModelAndView deleteTodo(HttpServletRequest request,	 String listnum ){
 		
 		ModelAndView mav = new ModelAndView();
@@ -120,13 +120,26 @@ public class TodoController {
     	Map<String,?> redirectMap = RequestContextUtils.getInputFlashMap(request);
     	String num = "";
     	
-    	if(redirectMap != null)
+    	if(redirectMap != null) {
     		num = (String) redirectMap.get("listnum");
+    	}
     	
     	Todo deleteTodo = todoService.select(Integer.valueOf(num));
     	todoService.deleteList(deleteTodo);
         	
         
+        return mav;
+    }*/
+	
+	@RequestMapping(value = "/delete", method = RequestMethod.GET)
+    public ModelAndView deleteTodo(String listnum){
+		
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("redirect:/todo/list");
+
+    	Todo deleteTodo = todoService.select(Integer.valueOf(listnum));
+    	todoService.deleteList(deleteTodo);
+        	
         return mav;
     }
 }
