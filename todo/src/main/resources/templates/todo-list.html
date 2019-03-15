@@ -55,6 +55,7 @@
 	</table>
 	<a href="#" th:href="@{/todo/form}" th:text="추가">추가</a>
 	<nav>
+	<!-- T 오퍼레이터를 사용해서 인스턴스에 직접 접근 -->
     <ul class="pagination"
         th:with="start=${T(Math).floor(list.number/10)*10 + 1},
                     last=(${start + 9 < list.totalPages ? start + 9 : list.totalPages})">
@@ -70,6 +71,11 @@
             </a>
         </li>
 
+		<!-- 
+			#numbers.sequence(start, last) : start지점부터 last지점까지 배열 생성 
+			page가 해당페이지면 class에 active추가
+			* list.number index는 0부터 시작한다.
+		-->
         <li th:each="page: ${#numbers.sequence(start, last)}" th:class="${page == list.number + 1} ? 'active'">
             <a th:text="${page}" th:href="@{/todo(page=${page},contents=${contents})}"></a>
         </li>
