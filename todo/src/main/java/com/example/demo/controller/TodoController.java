@@ -2,10 +2,12 @@
 package com.example.demo.controller;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -24,25 +26,32 @@ public class TodoController {
 	TodoService todoService;
 	
 	@RequestMapping(value = {"","/index","/list"}, method = RequestMethod.GET)
-    public ModelAndView  main(String contents, @ModelAttribute Todo todo){
+    public ModelAndView  main(String contents, @ModelAttribute Todo todo, Pageable page){
 		ModelAndView mav = new ModelAndView();
-		List<Todo> list = new ArrayList<Todo>();
+		//List<Todo> list = new ArrayList<Todo>();
 		if(!"".equals(contents) && contents != null) {
 			mav.setViewName("todo-list");
-			list = todoService.selectList(contents);
+			Page<Todo> list = todoService.selectList(contents,page);
+			mav.addObject("list", list);
+			mav.addObject("contents", contents);
 		} else {
-			list = todoService.selectAll();
+			Page<Todo> todoList = todoService.selectAll(page);
+			System.out.println("총 element 수 : {}, 전체 page 수 : {}, 페이지에 표시할 element 수 : {}, 현재 페이지 index : {}, 현재 페이지의 element 수 : {},"+
+					todoList.getTotalElements()+","+ todoList.getTotalPages()+","+ todoList.getSize()+","+
+					todoList.getNumber()+","+todoList.getNumberOfElements());
+			mav.addObject("list", todoList);
+			mav.addObject("contents", contents);
 		}
-		mav.addObject("list", list);
+		
 		mav.setViewName("todo-list");
         return mav;
     }
 	
 	@RequestMapping(value = "/form", method = RequestMethod.GET)
-    public ModelAndView getInserView(@ModelAttribute Todo todo, String type, int listNum, RedirectAttributes redirectAttr){
+    public ModelAndView getInserView(@ModelAttribute Todo todo, String type, String listNum, RedirectAttributes redirectAttr){
 		ModelAndView mav = new ModelAndView();
 		if("modify".equals(type)) {
-			Todo detail = todoService.select(listNum);
+			Todo detail = todoService.select(Integer.valueOf(listNum));
         	mav.addObject("todo", detail);
         	mav.addObject("type", type);
 		} 

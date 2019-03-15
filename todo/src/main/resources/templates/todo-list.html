@@ -13,6 +13,10 @@
 	table, th, td {
 	    border: 1px solid black;
 	} 
+	
+	li { list-style: none; display:inline; } 
+	
+	nav {width:500px;}
 </style>
 <body>
    <h1 th:text="list">List</h1>
@@ -50,6 +54,39 @@
 	    </tr>	
 	</table>
 	<a href="#" th:href="@{/todo/form}" th:text="추가">추가</a>
+	<nav>
+    <ul class="pagination"
+        th:with="start=${T(Math).floor(list.number/10)*10 + 1},
+                    last=(${start + 9 < list.totalPages ? start + 9 : list.totalPages})">
+        <li>
+            <a th:href="@{/todo(page=1,contents=${contents})}" aria-label="First">
+                <span aria-hidden="true">First</span>
+            </a>
+        </li>
+
+        <li th:class="${list.first} ? 'disabled'"> <!-- 현재페이지가 첫번째페이지면 disabled -->
+            <a th:href="${list.first} ? '#' :@{/todo(page=${list.number},contents=${contents})}" aria-label="Previous">
+                <span aria-hidden="true">&lt;</span>
+            </a>
+        </li>
+
+        <li th:each="page: ${#numbers.sequence(start, last)}" th:class="${page == list.number + 1} ? 'active'">
+            <a th:text="${page}" th:href="@{/todo(page=${page},contents=${contents})}"></a>
+        </li>
+
+        <li th:class="${list.last} ? 'disabled'">
+            <a th:href="${list.last} ? '#' : @{/todo(page=${list.number + 2},contents=${contents})}" aria-label="Next">
+                <span aria-hidden="true">&gt;</span>
+            </a>
+        </li>
+
+        <li>
+            <a th:href="@{/todo(page=${list.totalPages},contents=${contents})}" aria-label="Last">
+                <span aria-hidden="true">Last</span>
+            </a>
+        </li>
+    </ul>
+</nav>
 	
 	<!-- <script type="text/javascript">
       function modify(listNum) {
