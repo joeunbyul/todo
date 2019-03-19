@@ -5,12 +5,13 @@ import java.sql.Timestamp;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.web.PageableDefault;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -26,23 +27,31 @@ public class TodoController {
 	TodoService todoService;
 	
 	@RequestMapping(value = {"","/index","/list"}, method = RequestMethod.GET)
-    public ModelAndView  main(String contents, @ModelAttribute Todo todo, Pageable page){
+    public ModelAndView  main(String contents, @ModelAttribute Todo todo, Pageable pageable, @RequestParam(value="rows", defaultValue="10")  String rows){
 		ModelAndView mav = new ModelAndView();
 		//List<Todo> list = new ArrayList<Todo>();
+		
+		if(rows == null) {
+			rows = "10";	
+		}
+
+		int row = Integer.valueOf(rows);
+		
+		int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1); // page는 index 처럼 0부터 시작
+        pageable = PageRequest.of(page, row, Sort.by("cdate").descending());
+        
 		if(!"".equals(contents) && contents != null) {
-			mav.setViewName("todo-list");
-			Page<Todo> list = todoService.selectList(contents,page);
-			mav.addObject("list", list);
-			mav.addObject("contents", contents);
+			Page<Todo> todoList = todoService.selectList(contents,pageable);
+			mav.addObject("list", todoList);
 		} else {
-			Page<Todo> todoList = todoService.selectAll(page);
+			Page<Todo> todoList = todoService.selectAll(pageable);
 			System.out.println("총 element 수 : {}, 전체 page 수 : {}, 페이지에 표시할 element 수 : {}, 현재 페이지 index : {}, 현재 페이지의 element 수 : {},"+
 					todoList.getTotalElements()+","+ todoList.getTotalPages()+","+ todoList.getSize()+","+
 					todoList.getNumber()+","+todoList.getNumberOfElements());
 			mav.addObject("list", todoList);
-			mav.addObject("contents", contents);
 		}
-		
+		mav.addObject("rows", rows);
+		mav.addObject("contents", contents);
 		mav.setViewName("todo-list");
         return mav;
     }

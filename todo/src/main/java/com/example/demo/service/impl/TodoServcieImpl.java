@@ -2,9 +2,7 @@ package com.example.demo.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.entity.Todo;
@@ -20,9 +18,6 @@ public class TodoServcieImpl implements TodoService {
 	@Override
 	public Page<Todo> selectList(String contents,Pageable pageable) {
 		
-		int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1); // page는 index 처럼 0부터 시작
-		pageable = PageRequest.of(page, 10, Sort.by("cdate").descending());
-        
 		Page<Todo> list = todoRepository.findByContentsContaining(contents,pageable);
 		
 		return list ;
@@ -62,8 +57,6 @@ public class TodoServcieImpl implements TodoService {
 	@Override
 	public Page<Todo> selectAll(Pageable pageable) {
 		
-		int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1); // page는 index 처럼 0부터 시작
-        pageable = PageRequest.of(page, 10, Sort.by("cdate").descending());
 		Page<Todo> list = todoRepository.findAll(pageable);
 		return list;
 		

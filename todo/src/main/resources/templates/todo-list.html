@@ -32,6 +32,13 @@
     		  <input type="text" th:field="*{contents}" th:value="${contents}"/>
               <input type="submit" th:value="검색"/> 
             </td>
+            <td>
+            	<select name="rows" id="rows" onchange="this.form.submit()">
+					<option th:value="5" th:selected="(5 == ${rows})" th:text="5"></option>
+					<option th:value="10" th:selected="(10 == ${rows})" th:text="10"></option>
+					<option th:value="15" th:selected="(15 == ${rows})" th:text="15"></option>
+				</select>
+            </td>
         </tr>
       </table>  
     </form>
@@ -60,13 +67,13 @@
         th:with="start=${T(Math).floor(list.number/10)*10 + 1},
                     last=(${start + 9 < list.totalPages ? start + 9 : list.totalPages})">
         <li>
-            <a th:href="@{/todo(page=1,contents=${contents})}" aria-label="First">
+            <a th:href="@{/todo(page=1,contents=${contents},rows=${rows})}" aria-label="First">
                 <span aria-hidden="true">First</span>
             </a>
         </li>
 
         <li th:class="${list.first} ? 'disabled'"> <!-- 현재페이지가 첫번째페이지면 disabled -->
-            <a th:href="${list.first} ? '#' :@{/todo(page=${list.number},contents=${contents})}" aria-label="Previous">
+            <a th:href="${list.first} ? '#' :@{/todo(page=${list.number},contents=${contents},rows=${rows})}" aria-label="Previous">
                 <span aria-hidden="true">&lt;</span>
             </a>
         </li>
@@ -77,25 +84,25 @@
 			* list.number index는 0부터 시작한다.
 		-->
         <li th:each="page: ${#numbers.sequence(start, last)}" th:class="${page == list.number + 1} ? 'active'">
-            <a th:text="${page}" th:href="@{/todo(page=${page},contents=${contents})}"></a>
+            <a th:text="${page}" th:href="@{/todo(page=${page},contents=${contents},rows=${rows})}"></a>
         </li>
 
         <li th:class="${list.last} ? 'disabled'">
-            <a th:href="${list.last} ? '#' : @{/todo(page=${list.number + 2},contents=${contents})}" aria-label="Next">
+            <a th:href="${list.last} ? '#' : @{/todo(page=${list.number + 2},contents=${contents},rows=${rows})}" aria-label="Next">
                 <span aria-hidden="true">&gt;</span>
             </a>
         </li>
 
         <li>
-            <a th:href="@{/todo(page=${list.totalPages},contents=${contents})}" aria-label="Last">
+            <a th:href="@{/todo(page=${list.totalPages},contents=${contents},rows=${rows})}" aria-label="Last">
                 <span aria-hidden="true">Last</span>
             </a>
         </li>
     </ul>
 </nav>
 	
-	<!-- <script type="text/javascript">
-      function modify(listNum) {
+	 <!--<script type="text/javascript">
+	  function modify(listNum) {
     	  $("#listNum").val(listNum);
     	  $("#type").val("modify");
     	  $("#form").attr("action", "/todo/form");
