@@ -9,10 +9,10 @@ import org.springframework.web.servlet.ModelAndView;
 @RestController
 public class HelloController {
 	
-	@RequestMapping(value="/", method= RequestMethod.GET)
+	@RequestMapping(value="/test", method= RequestMethod.GET)
 	public ModelAndView main() {
 		ModelAndView mav = new ModelAndView();
-		mav.setViewName("hello");
+		mav.setViewName("list");
 		mav.addObject("text", "world");
         return mav;
     }

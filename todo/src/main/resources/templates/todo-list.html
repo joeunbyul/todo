@@ -64,8 +64,8 @@
 	<nav>
 	<!-- T 오퍼레이터를 사용해서 인스턴스에 직접 접근 -->
     <ul class="pagination"
-        th:with="start=${T(Math).floor(list.number/10)*10 + 1},
-                    last=(${start + 9 < list.totalPages ? start + 9 : list.totalPages})">
+        th:with="block = ${block}, start=${T(Math).floor(list.number/block)*block + 1},
+                    last=(${start + block - 1 < list.totalPages ? start + block -1 : list.totalPages})"> <!-- 시작페이지번호 + block수 - 1 -->
         <li>
             <a th:href="@{/todo(page=1,contents=${contents},rows=${rows})}" aria-label="First">
                 <span aria-hidden="true">First</span>

@@ -29,7 +29,7 @@ public class TodoController {
 	@RequestMapping(value = {"","/index","/list"}, method = RequestMethod.GET)
     public ModelAndView  main(String contents, @ModelAttribute Todo todo, Pageable pageable, @RequestParam(value="rows", defaultValue="10")  String rows){
 		ModelAndView mav = new ModelAndView();
-		//List<Todo> list = new ArrayList<Todo>();
+		//List<Todo> todoList = new ArrayList<Todo>();
 		
 		if(rows == null) {
 			rows = "10";	
@@ -50,8 +50,10 @@ public class TodoController {
 					todoList.getNumber()+","+todoList.getNumberOfElements());
 			mav.addObject("list", todoList);
 		}
+		
 		mav.addObject("rows", rows);
 		mav.addObject("contents", contents);
+		mav.addObject("block",5);
 		mav.setViewName("todo-list");
         return mav;
     }
